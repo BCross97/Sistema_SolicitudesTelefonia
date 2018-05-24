@@ -14,12 +14,12 @@ public class BusinessDelegate implements IBusinessDelegate {
 	public void crearBaseDeDatos(String usuario, String contrasenia) throws Exception {
 		Conexion.conectar(usuario, contrasenia);
 		Statement stm = Conexion.conexion.createStatement();
-		//Crear tablas
-		stm.executeUpdate(leerSQL("/SolicitudesTelefonia/ArchivosSQL/CrearTablasYDatos/Crear_Tablas.sql"));	
+		// Crear tablas
+		stm.executeUpdate(leerSQL("/SolicitudesTelefonia/ArchivosSQL/CrearTablasYDatos/Crear_Tablas.sql"));
 		stm.close();
 		Conexion.cerrarConexion();
 	}
-	
+
 	private String leerSQL(String direccion) {
 		String sCadena = "";
 		String retorno = "";
@@ -41,8 +41,16 @@ public class BusinessDelegate implements IBusinessDelegate {
 		}
 		return retorno;
 	}
-	
+
 	public static void main(String[] args) {
+		System.out.println("-------- Prueba de Registro de Oracle JDBC ------");
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+		} catch (ClassNotFoundException e) {
+			System.out.println("¡Oracle JDBC Driver no encontrado!");
+			e.printStackTrace();
+			return;
+		}
 		IBusinessDelegate del = new BusinessDelegate();
 		try {
 			del.crearBaseDeDatos("P09551_1_18", "P09551_1_18");
@@ -50,6 +58,5 @@ public class BusinessDelegate implements IBusinessDelegate {
 			e.printStackTrace();
 		}
 	}
-	
 
 }
