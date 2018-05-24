@@ -13,13 +13,14 @@ public class BusinessDelegate implements IBusinessDelegate {
 	@Override
 	public void crearBaseDeDatos(String usuario, String contrasenia) throws Exception {
 		Conexion.conectar(usuario, contrasenia);
-		Statement stm = Conexion.getConexion().createStatement();
-		stm.executeUpdate(leerSQL(""));	
+		Statement stm = Conexion.conexion.createStatement();
+		//Crear tablas
+		stm.executeUpdate(leerSQL("/SolicitudesTelefonia/ArchivosSQL/CrearTablasYDatos/Crear_Tablas.sql"));	
 		stm.close();
 		Conexion.cerrarConexion();
 	}
 	
-	public String leerSQL(String direccion) {
+	private String leerSQL(String direccion) {
 		String sCadena = "";
 		String retorno = "";
 		File file = new File(direccion);
@@ -40,5 +41,15 @@ public class BusinessDelegate implements IBusinessDelegate {
 		}
 		return retorno;
 	}
+	
+	public static void main(String[] args) {
+		IBusinessDelegate del = new BusinessDelegate();
+		try {
+			del.crearBaseDeDatos("P09551_1_18", "P09551_1_18");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 
 }
