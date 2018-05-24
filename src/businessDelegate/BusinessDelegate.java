@@ -5,7 +5,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.CallableStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
+
 import conexion.Conexion;
 
 public class BusinessDelegate implements IBusinessDelegate {
@@ -41,13 +46,14 @@ public class BusinessDelegate implements IBusinessDelegate {
 		}
 		return retorno;
 	}
+	
 
 	public static void main(String[] args) {
 		System.out.println("-------- Prueba de Registro de Oracle JDBC ------");
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 		} catch (ClassNotFoundException e) {
-			System.out.println("¡Oracle JDBC Driver no encontrado!");
+			System.out.println("ï¿½Oracle JDBC Driver no encontrado!");
 			e.printStackTrace();
 			return;
 		}
