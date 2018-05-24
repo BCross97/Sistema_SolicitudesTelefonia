@@ -5,11 +5,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.sql.CallableStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Types;
 
 import conexion.Conexion;
 
@@ -20,9 +17,22 @@ public class BusinessDelegate implements IBusinessDelegate {
 		Conexion.conectar(usuario, contrasenia);
 		Statement stm = Conexion.conexion.createStatement();
 		// Crear tablas
-		stm.executeUpdate(leerSQL("/SolicitudesTelefonia/ArchivosSQL/CrearTablasYDatos/Crear_Tablas.sql"));
+		ejecutarScript(leerSQL("./ArchivosSQL/CrearTablasYDatos/Crear_Tablas.sql"), stm);
+		ejecutarScript(leerSQL("./ArchivosSQL/CrearTablasYDatos/Insertar_datos.sql"), stm);
+		// TODO cargar paquetes
 		stm.close();
 		Conexion.cerrarConexion();
+	}
+
+	private void ejecutarScript(String sql, Statement stm) throws SQLException {
+		String[] esecuele = sql.split(";");
+		for (int i = 0; i < esecuele.length; i++) {
+			try {
+				stm.executeUpdate(esecuele[i]);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	private String leerSQL(String direccion) {
@@ -32,11 +42,11 @@ public class BusinessDelegate implements IBusinessDelegate {
 		if (!file.exists()) {
 			return null;
 		}
-
 		try {
 			BufferedReader bf = new BufferedReader(new FileReader(file));
 			while ((sCadena = bf.readLine()) != null) {
-				retorno += sCadena;
+				if (!sCadena.equals("") && sCadena.charAt(0) != '-')
+					retorno += sCadena;
 			}
 			bf.close();
 		} catch (FileNotFoundException fnfe) {
@@ -45,24 +55,6 @@ public class BusinessDelegate implements IBusinessDelegate {
 			return null;
 		}
 		return retorno;
-	}
-	
-
-	public static void main(String[] args) {
-		System.out.println("-------- Prueba de Registro de Oracle JDBC ------");
-		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-		} catch (ClassNotFoundException e) {
-			System.out.println("�Oracle JDBC Driver no encontrado!");
-			e.printStackTrace();
-			return;
-		}
-		IBusinessDelegate del = new BusinessDelegate();
-		try {
-			del.crearBaseDeDatos("P09551_1_18", "P09551_1_18");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 }
