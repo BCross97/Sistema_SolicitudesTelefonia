@@ -14,6 +14,13 @@ public class BusinessDelegate implements IBusinessDelegate {
 
 	@Override
 	public void crearBaseDeDatos(String usuario, String contrasenia) throws Exception {
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+		} catch (ClassNotFoundException e) {
+			System.out.println("¡Oracle JDBC Driver no encontrado!");
+			e.printStackTrace();
+			return;
+		}
 		Conexion.conectar(usuario, contrasenia);
 		Statement stm = Conexion.conexion.createStatement();
 		// Crear tablas
@@ -30,7 +37,7 @@ public class BusinessDelegate implements IBusinessDelegate {
 			try {
 				stm.executeUpdate(esecuele[i]);
 			} catch (Exception e) {
-				e.printStackTrace();
+
 			}
 		}
 	}
@@ -56,5 +63,6 @@ public class BusinessDelegate implements IBusinessDelegate {
 		}
 		return retorno;
 	}
+	
 
 }
