@@ -18,19 +18,28 @@ public class BusinessDelegate implements IBusinessDelegate {
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 		} catch (ClassNotFoundException e) {
-			System.out.println("Â¡Oracle JDBC Driver no encontrado!");
+			System.out.println("¡Oracle JDBC Driver no encontrado!");
 			e.printStackTrace();
 			return;
 		}
 		Conexion.conectar(usuario, contrasenia);
 		Statement stm = Conexion.conexion.createStatement();
 		// Crear tablas
-		ejecutarScript(leerSQL("./ArchivosSQL/CrearTablasYDatos/Crear_Tablas.sql"), stm);
-		ejecutarScript(leerSQL("./ArchivosSQL/CrearTablasYDatos/Insertar_datos.sql"), stm);
+		ejecutarScripts(stm);
 		// Cargar paquetes
 		ejecutarPaquetesNivel1(stm);
+		ejecutarPaquetesNivel2(stm);
 		stm.close();
 		Conexion.cerrarConexion();
+	}
+
+	private void ejecutarScripts(Statement stm) {
+		try {
+			ejecutarScript(leerSQL("./ArchivosSQL/CrearTablasYDatos/Crear_Tablas.sql"), stm);
+			ejecutarScript(leerSQL("./ArchivosSQL/CrearTablasYDatos/Insertar_datos.sql"), stm);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void ejecutarPaquetesNivel1(Statement stm) {
@@ -43,6 +52,16 @@ public class BusinessDelegate implements IBusinessDelegate {
 			ejecutarPaquetes(stm, leerPaquetes("./ArchivosSQL/Paquetes Nivel 1/pkTipoAnomalia.sql"));
 			ejecutarPaquetes(stm, leerPaquetes("./ArchivosSQL/Paquetes Nivel 1/pkTipoProducto.sql"));
 			ejecutarPaquetes(stm, leerPaquetes("./ArchivosSQL/Paquetes Nivel 1/pkTipoSolicitud.sql"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void ejecutarPaquetesNivel2(Statement stm) {
+		try {
+			ejecutarPaquetes(stm, leerPaquetes("./ArchivosSQL/Paquetes Nivel 2/pkEliminarNivel2.sql"));
+			ejecutarPaquetes(stm, leerPaquetes("./ArchivosSQL/Paquetes Nivel 2/pkModificarNivel2.sql"));
+			ejecutarPaquetes(stm, leerPaquetes("./ArchivosSQL/Paquetes Nivel 2/pkRegistrarNivel2.sql"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
