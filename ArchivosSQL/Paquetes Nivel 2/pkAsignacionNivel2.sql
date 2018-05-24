@@ -1,9 +1,9 @@
 create or replace PACKAGE pkAsignacionNivel2 AS
-  PROCEDURE pAsignar(ivIdSolicitud IN VARCHAR2);
+  PROCEDURE pAsignar(ivIdSolicitud IN NUMBER);
 END pkAsignacionNivel2;
 /
 create or replace PACKAGE BODY pkAsignacionNivel2 AS
-  PROCEDURE pAsignar(ivIdSolicitud IN VARCHAR2)
+  PROCEDURE pAsignar(ivIdSolicitud IN NUMBER)
   IS
   BEGIN
       UPDATE SOLICITUD
