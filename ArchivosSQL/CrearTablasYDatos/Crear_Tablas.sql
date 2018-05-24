@@ -3,7 +3,6 @@
 --   sitio:      Oracle Database 10g
 --   tipo:      Oracle Database 10g
 
-
 DROP TABLE cliente CASCADE CONSTRAINTS;
 DROP TABLE funcionario CASCADE CONSTRAINTS;
 DROP TABLE parametros CASCADE CONSTRAINTS;
